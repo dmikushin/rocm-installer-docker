@@ -11,3 +11,4 @@ docker build -t rocm-${ROCM_VERSION} .
 sed "s/\${ROCM_VERSION}/${ROCM_VERSION}/g" docker-compose.yml.in >docker-compose.yml
 docker-compose up -d
 docker-compose run rocm-${ROCM_VERSION} /install.sh
+docker-compose down
