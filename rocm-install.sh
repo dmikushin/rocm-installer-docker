@@ -6,9 +6,10 @@ if [ "$#" -ne 1 ]; then
     exit 1
 fi
 ROCM_VERSION=$1
-echo "ROCM_VERSION=${ROCM_VERSION}" >.env
 docker build -t rocm-${ROCM_VERSION} .
-sed "s/\${ROCM_VERSION}/${ROCM_VERSION}/g" docker-compose.yml.in >docker-compose.yml
-docker-compose up -d
-docker-compose run rocm-${ROCM_VERSION} /install.sh
-docker-compose down
+docker run --rm -it \
+        -e ROCM_VERSION=${ROCM_VERSION} \
+	-v /opt/rocm-${ROCM_VERSION}:/opt/rocm-${ROCM_VERSION}
+	-v $(pwd)/.installed:/.installed \
+        amdgpu-${AMDGPU_VERSION} \
+        bash /install.sh
